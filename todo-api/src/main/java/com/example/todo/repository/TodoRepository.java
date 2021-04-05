@@ -12,4 +12,6 @@ import com.example.todo.entities.TodoDao;
 public interface TodoRepository extends CrudRepository<TodoDao, Long> {
 	
 	public List<TodoDao> findByUser_UserId(@Param("id") Long id);
+	
+	public List<TodoDao> findByUser_UserName(@Param("userName") String userName);
 }

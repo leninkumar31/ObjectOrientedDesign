@@ -18,8 +18,8 @@ public class TodoService implements ITodoService {
 	TodoRepository todoRepository;
 
 	@Override
-	public List<Todo> fetchTodoListByUserId(Long id) {
-		List<TodoDao> daoList = todoRepository.findByUser_UserId(id);
+	public List<Todo> fetchTodoListByUserName(String userName) {
+		List<TodoDao> daoList = todoRepository.findByUser_UserName(userName);
 		List<Todo> todoList = new ArrayList<>();
 		for (TodoDao dao : daoList) {
 			todoList.add(convertDaoToTodo(dao));

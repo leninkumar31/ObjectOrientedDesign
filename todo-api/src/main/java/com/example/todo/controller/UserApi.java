@@ -33,31 +33,23 @@ public class UserApi {
 	JwtTokenUtil jwtService;
 
 	@PostMapping("/register")
-	public ResponseEntity<List<Todo>> createUser(@RequestBody User user) throws ResourceAlreadyExistsException {
+	public ResponseEntity<?> createUser(@RequestBody User user) throws ResourceAlreadyExistsException {
 		User data = userService.insertUser(user);
 		String token = jwtService.generateToken(data);
-		List<Todo> todoList = todoService.fetchTodoListByUserId(data.getUserId());
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
 		headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-		if (todoList.isEmpty()) {
-			return new ResponseEntity<List<Todo>>(headers, HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<Todo>>(todoList, headers, HttpStatus.OK);
+		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<List<Todo>> loginUser(@RequestBody User user) throws ResourceNotFoundException {
 		User data = userService.validateUser(user);
 		String token = jwtService.generateToken(data);
-		List<Todo> todoList = todoService.fetchTodoListByUserId(data.getUserId());
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
 		headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-		if (todoList.isEmpty()) {
-			return new ResponseEntity<List<Todo>>(headers, HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<Todo>>(todoList, headers, HttpStatus.OK);
+		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
 
 }
