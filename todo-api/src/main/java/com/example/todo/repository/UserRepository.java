@@ -17,4 +17,5 @@ public interface UserRepository extends CrudRepository<UserDao, Long> {
 
 	@Query("SELECT t FROM UserDao t WHERE t.userName = :userName AND t.password = :password")
 	public Optional<UserDao> validateUser(@Param("userName") String userName, @Param("password") String password);
+	
 }

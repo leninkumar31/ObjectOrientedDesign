@@ -1,6 +1,7 @@
 package com.example.todo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.todo.entities.UserDao;
@@ -15,6 +16,9 @@ public class UserService implements IUserService {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	@Override
 	public User insertUser(User user) throws ResourceAlreadyExistsException {
 		if (userRepository.validateUserName(user.getUserName()).isPresent()) {
@@ -27,9 +31,12 @@ public class UserService implements IUserService {
 
 	@Override
 	public User validateUser(User user) throws ResourceNotFoundException {
-		UserDao dao = userRepository.validateUser(user.getUserName(), user.getPassword())
+		UserDao userDao = userRepository.validateUserName(user.getUserName())
 				.orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + user.getUserName()));
-		return convertUserDaoToUser(dao);
+		if (!passwordEncoder.matches(user.getPassword(), userDao.getPassword())) {
+			throw new ResourceNotFoundException("Incorrect Password for:: " + user.getUserName());
+		}
+		return convertUserDaoToUser(userDao);
 	}
 
 	private User convertUserDaoToUser(UserDao userDao) {
@@ -48,7 +55,7 @@ public class UserService implements IUserService {
 		userDao.setEmail(user.getEmail());
 		userDao.setFirstName(user.getFirstName());
 		userDao.setLastName(user.getLastName());
-		userDao.setPassword(user.getPassword());
+		userDao.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userDao;
 	}
 }
