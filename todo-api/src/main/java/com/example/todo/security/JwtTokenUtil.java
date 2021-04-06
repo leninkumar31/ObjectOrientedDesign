@@ -10,6 +10,7 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.example.todo.models.Login;
 import com.example.todo.models.User;
 
 import io.jsonwebtoken.Claims;
@@ -29,7 +30,7 @@ public class JwtTokenUtil implements Serializable {
 	@Value("${jwt.secret}")
 	private String secret;
 
-	public boolean validateToken(String token, User user) {
+	public boolean validateToken(String token, Login user) {
 		Optional<String> userName = getUserNameFromToken(token);
 		if (userName.isEmpty()) {
 			return false;

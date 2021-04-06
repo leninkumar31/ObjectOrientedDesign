@@ -1,5 +1,7 @@
 package com.example.todo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.todo.entities.UserDao;
 import com.example.todo.exceptions.ResourceAlreadyExistsException;
 import com.example.todo.exceptions.ResourceNotFoundException;
+import com.example.todo.models.Login;
 import com.example.todo.models.User;
 import com.example.todo.repository.UserRepository;
 
@@ -21,7 +24,8 @@ public class UserService implements IUserService {
 
 	@Override
 	public User insertUser(User user) throws ResourceAlreadyExistsException {
-		if (userRepository.validateUserName(user.getUserName()).isPresent()) {
+		Optional<UserDao> userDao = userRepository.validateUserName(user.getUserName());
+		if (userDao.isPresent()) {
 			throw new ResourceAlreadyExistsException(
 					"UserName alredy exists. Please Use Some other name ::" + user.getUserName());
 		}
@@ -30,7 +34,7 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User validateUser(User user) throws ResourceNotFoundException {
+	public User validateUser(Login user) throws ResourceNotFoundException {
 		UserDao userDao = userRepository.validateUserName(user.getUserName())
 				.orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + user.getUserName()));
 		if (!passwordEncoder.matches(user.getPassword(), userDao.getPassword())) {
@@ -41,14 +45,13 @@ public class UserService implements IUserService {
 
 	private User convertUserDaoToUser(UserDao userDao) {
 		User user = new User();
-		user.setUserId(userDao.getUserId());
 		user.setUserName(userDao.getUserName());
 		user.setEmail(userDao.getEmail());
 		user.setFirstName(userDao.getFirstName());
 		user.setLastName(userDao.getLastName());
 		return user;
 	}
-
+	
 	private UserDao convertUserToUserDao(User user) {
 		UserDao userDao = new UserDao();
 		userDao.setUserName(user.getUserName());

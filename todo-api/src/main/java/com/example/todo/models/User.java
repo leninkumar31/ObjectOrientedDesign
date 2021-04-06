@@ -1,20 +1,25 @@
 package com.example.todo.models;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 public class User {
-	Long UserId;
+	
+	@NotEmpty(message = "User Name must not be empty")
 	String UserName;
+	
+	@NotEmpty(message = "First Name must not be empty")
 	String FirstName;
+	
+	@NotEmpty(message = "Last Name must not be empty")
 	String LastName;
+	
+	@NotEmpty(message = "Email must not be empty")
+	@Email(message = "Email must be a valid email address")
 	String Email;
+	
+	@NotEmpty(message = "Password must not be empty")
 	String Password;
-
-	public Long getUserId() {
-		return UserId;
-	}
-
-	public void setUserId(Long userId) {
-		UserId = userId;
-	}
 
 	public String getUserName() {
 		return UserName;

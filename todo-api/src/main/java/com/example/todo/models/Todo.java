@@ -2,12 +2,25 @@ package com.example.todo.models;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Todo {
 	Long Id;
+
+	@NotNull(message = "User Id must not be empty")
 	Long UserId;
+
+	@NotEmpty(message = "Task must not be empty")
 	String Task;
-	boolean isCompleted;
+
+	@NotNull(message = "Created Date must not be empty")
+	@DateTimeFormat(pattern = "yyyy-mm-dd")
 	Date CreatedDate;
+
+	boolean isCompleted;
 
 	public Long getUserId() {
 		return UserId;
