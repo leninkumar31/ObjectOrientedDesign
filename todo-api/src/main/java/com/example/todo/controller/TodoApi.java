@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.todo.exceptions.NoAuthorizationException;
 import com.example.todo.models.Todo;
 import com.example.todo.security.JwtTokenUtil;
 import com.example.todo.service.ITodoService;
@@ -33,8 +34,11 @@ public class TodoApi {
 	JwtTokenUtil jwtService;
 
 	@GetMapping("/")
-	public List<Todo> readTodo(@RequestHeader("Authorization") String token) {
-		Optional<String> userName = jwtService.getUserNameFromToken(token.split(" ")[1]);
+	public List<Todo> readTodo(@RequestHeader("Authorization") String authHeader) {
+		Optional<String> userName = jwtService.getUserNameFromToken(getTokenFromAuthHeader(authHeader));
+		if(!userName.isPresent()) {
+			throw new NoAuthorizationException("Invalid token");
+		}
 		return todoService.fetchTodoListByUserName(userName.get());
 	}
 
@@ -54,6 +58,17 @@ public class TodoApi {
 	public ResponseEntity<?> deleteTodo(@PathVariable @Min(value=1, message="Id must be greater than or equal to 1") Long id) {
 		todoService.removeTodoById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	private String getTokenFromAuthHeader(String authHeader) {
+		if(authHeader == null) {
+			return "";
+		}
+		String[] splitArr = authHeader.split(" ");
+		if (splitArr.length == 2 && "Bearer".equals(splitArr[0])) {
+			return splitArr[1];
+		}
+		return "";
 	}
 
 }

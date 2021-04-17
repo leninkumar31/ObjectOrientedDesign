@@ -1,13 +1,12 @@
 package com.example.todo.service;
 
-import com.example.todo.exceptions.ResourceAlreadyExistsException;
-import com.example.todo.exceptions.ResourceNotFoundException;
-import com.example.todo.models.Login;
+import java.util.Optional;
+
 import com.example.todo.models.User;
 
 public interface IUserService {
 
-	User insertUser(User user) throws ResourceAlreadyExistsException;
+	User insertUser(User user);
 
-	User validateUser(Login user) throws ResourceNotFoundException;
+	Optional<User> getUser(String userName);
 }

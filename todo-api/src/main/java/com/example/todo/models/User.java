@@ -2,23 +2,26 @@ package com.example.todo.models;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class User {
-	
+
 	@NotEmpty(message = "User Name must not be empty")
+	@Size(min = 8, max = 15)
 	String UserName;
-	
+
 	@NotEmpty(message = "First Name must not be empty")
 	String FirstName;
-	
+
 	@NotEmpty(message = "Last Name must not be empty")
 	String LastName;
-	
+
 	@NotEmpty(message = "Email must not be empty")
 	@Email(message = "Email must be a valid email address")
 	String Email;
 	
 	@NotEmpty(message = "Password must not be empty")
+	@Size(min = 6, max = 15)
 	String Password;
 
 	public String getUserName() {
