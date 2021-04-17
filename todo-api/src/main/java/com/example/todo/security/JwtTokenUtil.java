@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.example.todo.models.Login;
-import com.example.todo.models.User;
+import com.example.todo.models.UserDetails;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -39,7 +39,7 @@ public class JwtTokenUtil implements Serializable {
 		return user.getUserName() != null && name.equals(user.getUserName()) && !isTokenExpired(token);
 	}
 
-	public String generateToken(User user) {
+	public String generateToken(UserDetails user) {
 		Map<String, Object> claims = new HashMap<>();
 		long currTime = System.currentTimeMillis();
 		return Jwts.builder().setClaims(claims).setSubject(user.getUserName()).setIssuedAt(new Date(currTime))

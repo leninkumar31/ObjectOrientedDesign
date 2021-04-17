@@ -30,6 +30,9 @@ public class TodoDao {
 
 	@Column(name = "created_date", nullable = false)
 	private Date createdDate;
+	
+	@Column(name = "modified_date", nullable = false)
+	private Date modifiedDate;
 
 	public Long getId() {
 		return id;
@@ -69,6 +72,14 @@ public class TodoDao {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 
 }

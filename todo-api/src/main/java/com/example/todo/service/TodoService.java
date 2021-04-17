@@ -1,6 +1,7 @@
 package com.example.todo.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 import com.example.todo.entities.TodoDao;
 import com.example.todo.entities.UserDao;
 import com.example.todo.models.Todo;
+import com.example.todo.models.TodoParam;
+import com.example.todo.models.UpdateTodoParam;
+import com.example.todo.models.UserDetails;
 import com.example.todo.repository.TodoRepository;
 
 @Service
@@ -28,25 +32,34 @@ public class TodoService implements ITodoService {
 	}
 
 	@Override
-	public Todo insertTodo(Todo todo) {
-		return convertDaoToTodo(todoRepository.save(convertTodoToDao(todo)));
+	public Todo insertTodo(UserDetails user, TodoParam todoParam) {
+		return convertDaoToTodo(todoRepository.save(convertTodoToDao(user, todoParam)));
 	}
 
 	@Override
-	public Todo updateTodo(Todo todo) {
-		TodoDao dao = convertTodoToDao(todo);
-		dao.setId(todo.getId());
+	public Todo updateTodo(UserDetails user, UpdateTodoParam todoParam) {
+		TodoDao dao = convertTodoToDao(user, todoParam);
+		dao.setId(todoParam.getId());
 		return convertDaoToTodo(todoRepository.save(dao));
 	}
 
-	private TodoDao convertTodoToDao(Todo todo) {
-		UserDao user = new UserDao();
-		user.setUserId(todo.getUserId());
+	@Override
+	public void removeTodoById(Long id) {
+		todoRepository.deleteById(id);
+	}
+
+	private TodoDao convertTodoToDao(UserDetails user, TodoParam todoParam) {
+		UserDao userDao = new UserDao();
+		userDao.setUserId(user.getUserId());
 		TodoDao dao = new TodoDao();
-		dao.setUser(user);
-		dao.setTask(todo.getTask());
-		dao.setIsCompleted(todo.isCompleted());
-		dao.setCreatedDate(todo.getCreatedDate());
+		dao.setUser(userDao);
+		dao.setTask(todoParam.getTask());
+		dao.setIsCompleted(todoParam.isCompleted());
+		Date currTime = new Date();
+		if (!(todoParam instanceof UpdateTodoParam)) {
+			dao.setCreatedDate(currTime);
+		}
+		dao.setModifiedDate(currTime);
 		return dao;
 	}
 
@@ -57,12 +70,7 @@ public class TodoService implements ITodoService {
 		todo.setTask(dao.getTask());
 		todo.setCompleted(dao.getIsCompleted());
 		todo.setCreatedDate(dao.getCreatedDate());
+		todo.setModifiedDate(dao.getModifiedDate());
 		return todo;
 	}
-
-	@Override
-	public void removeTodoById(Long id) {
-		todoRepository.deleteById(id);
-	}
-
 }

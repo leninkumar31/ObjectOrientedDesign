@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.todo.repository.UserRepository;
+import com.example.todo.service.UserService;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -26,7 +26,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	JwtTokenUtil jwtService;
 
 	@Autowired
-	UserRepository userRepository;
+	UserService userService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -34,7 +34,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		getTokenString(request.getHeader(HttpHeaders.AUTHORIZATION)).ifPresent(token -> {
 			jwtService.getUserNameFromToken(token).ifPresent(userName -> {
 				if (SecurityContextHolder.getContext().getAuthentication() == null) {
-					userRepository.getUserByUserName(userName).ifPresent(user -> {
+					userService.getUser(userName).ifPresent(user -> {
 						UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 								user, null, Collections.emptyList());
 						authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -3,10 +3,11 @@ package com.example.todo.service;
 import java.util.Optional;
 
 import com.example.todo.models.User;
+import com.example.todo.models.UserDetails;
 
 public interface IUserService {
 
-	User insertUser(User user);
+	UserDetails insertUser(User user);
 
-	Optional<User> getUser(String userName);
+	Optional<UserDetails> getUser(String userName);
 }

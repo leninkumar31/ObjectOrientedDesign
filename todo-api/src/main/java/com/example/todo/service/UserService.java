@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.todo.entities.UserDao;
 import com.example.todo.models.User;
+import com.example.todo.models.UserDetails;
 import com.example.todo.repository.UserRepository;
 
 @Service
@@ -20,22 +21,23 @@ public class UserService implements IUserService {
 	PasswordEncoder passwordEncoder;
 
 	@Override
-	public User insertUser(User user) {
+	public UserDetails insertUser(User user) {
 		UserDao dao = userRepository.save(convertUserToUserDao(user));
-		return convertUserDaoToUser(Optional.ofNullable(dao));
+		return convertUserDaoToUserDetails(Optional.ofNullable(dao));
 	}
 
 	@Override
-	public Optional<User> getUser(String userName) {
+	public Optional<UserDetails> getUser(String userName) {
 		Optional<UserDao> userDao = userRepository.getUserByUserName(userName);
-		return Optional.ofNullable(convertUserDaoToUser(userDao));
+		return Optional.ofNullable(convertUserDaoToUserDetails(userDao));
 	}
 
-	private User convertUserDaoToUser(Optional<UserDao> userDao) {
+	private UserDetails convertUserDaoToUserDetails(Optional<UserDao> userDao) {
 		if(!userDao.isPresent()) {
 			return null;
 		}
-		User user = new User();
+		UserDetails user = new UserDetails();
+		user.setUserId(userDao.get().getUserId());
 		user.setUserName(userDao.get().getUserName());
 		user.setEmail(userDao.get().getEmail());
 		user.setFirstName(userDao.get().getFirstName());
