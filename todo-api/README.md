@@ -10,10 +10,10 @@
   - Email
   - Password
 - Response
-        1. 201(Created)
-            1. Response Header(AUTHORIZATION) will have JWT token
-        2. 409 (Conflict)  Username already exists
-        3. 
+  - 201(Created)
+    - Response Header(AUTHORIZATION) will have JWT token
+    - 409 (Conflict)  Username already exists
+    - 400 (Bad Request) if required fields doesn’t present or fail to satisfy constraints
 ## Login end point
 - Method : POST
 - Path : “\login”
