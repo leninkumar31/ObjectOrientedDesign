@@ -12,7 +12,7 @@ public interface ITodoService {
 
 	Todo insertTodo(UserDetails user, TodoParam todoParam);
 	
-	Todo updateTodo(UserDetails user, UpdateTodoParam todoParam);
+	void updateTodo(UpdateTodoParam todoParam);
 
 	void removeTodoById(Long id);
 }

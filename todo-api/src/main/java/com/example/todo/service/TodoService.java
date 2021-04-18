@@ -37,10 +37,8 @@ public class TodoService implements ITodoService {
 	}
 
 	@Override
-	public Todo updateTodo(UserDetails user, UpdateTodoParam todoParam) {
-		TodoDao dao = convertTodoToDao(user, todoParam);
-		dao.setId(todoParam.getId());
-		return convertDaoToTodo(todoRepository.save(dao));
+	public void updateTodo(UpdateTodoParam todoParam) {
+		todoRepository.updateTodo(todoParam.getId(), todoParam.getTask(), todoParam.isCompleted());
 	}
 
 	@Override

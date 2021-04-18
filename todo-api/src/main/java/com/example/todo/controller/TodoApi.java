@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.todo.models.TodoParam;
 import com.example.todo.models.Todo;
+import com.example.todo.models.TodoParam;
 import com.example.todo.models.UpdateTodoParam;
 import com.example.todo.models.UserDetails;
 import com.example.todo.security.JwtTokenUtil;
@@ -46,8 +46,8 @@ public class TodoApi {
 	}
 
 	@PostMapping("/update")
-	public ResponseEntity<?> updateTodo(@AuthenticationPrincipal UserDetails user, @Valid @RequestBody UpdateTodoParam todo) {
-		todoService.updateTodo(user, todo);
+	public ResponseEntity<?> updateTodo(@Valid @RequestBody UpdateTodoParam todo) {
+		todoService.updateTodo(todo);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
