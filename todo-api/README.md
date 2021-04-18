@@ -2,12 +2,12 @@
 - Method : POST
 - Path : “\register”
 - Payload (Required fields)
-        1. Username
-        2. First name
-        3. Lastname
-        4. Email
-        5. Password
-    4. Response
+        - Username
+        - First name
+        - Lastname
+        - Email
+        - Password
+- Response
         1. 201(Created)
             1. Response Header(AUTHORIZATION) will have JWT token
         2. 409 (Conflict)  Username already exists
