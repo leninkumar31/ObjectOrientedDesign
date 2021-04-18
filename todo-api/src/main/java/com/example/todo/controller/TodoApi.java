@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.todo.exceptions.NoAuthorizationException;
 import com.example.todo.models.Todo;
 import com.example.todo.models.TodoParam;
 import com.example.todo.models.UserDetails;
 import com.example.todo.security.JwtTokenUtil;
+import com.example.todo.service.AuthorizationService;
 import com.example.todo.service.ITodoService;
 
 @RestController
@@ -34,6 +36,9 @@ public class TodoApi {
 
 	@Autowired
 	JwtTokenUtil jwtService;
+	
+	@Autowired
+	AuthorizationService authService;
 
 	@GetMapping("/")
 	public List<Todo> readTodo(@AuthenticationPrincipal UserDetails user,
@@ -49,16 +54,23 @@ public class TodoApi {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateTodo(
+	public ResponseEntity<?> updateTodo(@AuthenticationPrincipal UserDetails user,
 			@PathVariable @Min(value = 1, message = "Id must be greater than or equal to 1") Long id,
 			@Valid @RequestBody Todo todo) {
+		if(!authService.canUpdate(user, id)) {
+			throw new NoAuthorizationException("Not Authorized to update the given task: "+id);
+		}
 		todoService.updateTodo(id, todo);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteTodo(
+			@AuthenticationPrincipal UserDetails user,
 			@PathVariable @Min(value = 1, message = "Id must be greater than or equal to 1") Long id) {
+		if(!authService.canUpdate(user, id)) {
+			throw new NoAuthorizationException("Not Authorized to delete the given task: "+id);
+		}
 		todoService.removeTodoById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

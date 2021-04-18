@@ -7,6 +7,8 @@ import com.example.todo.models.TodoParam;
 import com.example.todo.models.UserDetails;
 
 public interface ITodoService {
+	Todo fetchTodoById(Long id);
+	
 	List<Todo> fetchTodoListByUserName(String userName);
 
 	List<Todo> fetchPaginatedTodoListByUserName(String userName, Integer pageNum, Integer pageSize);

@@ -3,6 +3,7 @@ package com.example.todo.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,15 @@ public class TodoService implements ITodoService {
 
 	@Autowired
 	TodoRepository todoRepository;
+
+	@Override
+	public Todo fetchTodoById(Long id) {
+		Optional<TodoDao> todoDao = todoRepository.findById(id);
+		if (todoDao.isPresent()) {
+			return convertDaoToTodo(todoDao.get());
+		}
+		return new Todo();
+	}
 
 	@Override
 	public List<Todo> fetchTodoListByUserName(String userName) {
