@@ -2,17 +2,22 @@ package com.example.todo.models;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class Todo {
 	Long Id;
 
 	Long UserId;
-
+	
+	@NotEmpty(message = "Task must not be empty")
 	String Task;
 
 	Date CreatedDate;
 
 	Date ModifiedDate;
 
+	@NotNull(message = "isCompleted must be either true or false")
 	boolean isCompleted;
 	
 	public Long getId() {

@@ -5,13 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.todo.entities.TodoDao;
 import com.example.todo.entities.UserDao;
 import com.example.todo.models.Todo;
 import com.example.todo.models.TodoParam;
-import com.example.todo.models.UpdateTodoParam;
 import com.example.todo.models.UserDetails;
 import com.example.todo.repository.TodoRepository;
 
@@ -32,13 +34,27 @@ public class TodoService implements ITodoService {
 	}
 
 	@Override
+	public List<Todo> fetchPaginatedTodoListByUserName(String userName, Integer pageNum, Integer pageSize) {
+		PageRequest paging = PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
+		Page<TodoDao> pagedResult = todoRepository.findByUser_UserName(userName, paging);
+		if (pagedResult.hasContent()) {
+			List<Todo> todoList = new ArrayList<>();
+			for (TodoDao dao : pagedResult.getContent()) {
+				todoList.add(convertDaoToTodo(dao));
+			}
+			return todoList;
+		}
+		return new ArrayList<>();
+	}
+
+	@Override
 	public Todo insertTodo(UserDetails user, TodoParam todoParam) {
 		return convertDaoToTodo(todoRepository.save(convertTodoToDao(user, todoParam)));
 	}
 
 	@Override
-	public void updateTodo(UpdateTodoParam todoParam) {
-		todoRepository.updateTodo(todoParam.getId(), todoParam.getTask(), todoParam.isCompleted());
+	public void updateTodo(Long id, Todo todo) {
+		todoRepository.updateTodo(id, todo.getTask(), todo.isCompleted(), new Date());
 	}
 
 	@Override
@@ -54,9 +70,7 @@ public class TodoService implements ITodoService {
 		dao.setTask(todoParam.getTask());
 		dao.setIsCompleted(todoParam.isCompleted());
 		Date currTime = new Date();
-		if (!(todoParam instanceof UpdateTodoParam)) {
-			dao.setCreatedDate(currTime);
-		}
+		dao.setCreatedDate(currTime);
 		dao.setModifiedDate(currTime);
 		return dao;
 	}

@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.todo.models.Todo;
 import com.example.todo.models.TodoParam;
-import com.example.todo.models.UpdateTodoParam;
 import com.example.todo.models.UserDetails;
 import com.example.todo.security.JwtTokenUtil;
 import com.example.todo.service.ITodoService;
@@ -35,8 +36,10 @@ public class TodoApi {
 	JwtTokenUtil jwtService;
 
 	@GetMapping("/")
-	public List<Todo> readTodo(@AuthenticationPrincipal UserDetails user) {
-		return todoService.fetchTodoListByUserName(user.getUserName());
+	public List<Todo> readTodo(@AuthenticationPrincipal UserDetails user,
+			@RequestParam(name = "page", defaultValue = "0") Integer page,
+			@RequestParam(name = "size", defaultValue = "1") Integer size) {
+		return todoService.fetchPaginatedTodoListByUserName(user.getUserName(), page, size);
 	}
 
 	@PostMapping("/insert")
@@ -45,10 +48,12 @@ public class TodoApi {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-	@PostMapping("/update")
-	public ResponseEntity<?> updateTodo(@Valid @RequestBody UpdateTodoParam todo) {
-		todoService.updateTodo(todo);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	@PutMapping("/update/{id}")
+	public ResponseEntity<?> updateTodo(
+			@PathVariable @Min(value = 1, message = "Id must be greater than or equal to 1") Long id,
+			@Valid @RequestBody Todo todo) {
+		todoService.updateTodo(id, todo);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@DeleteMapping("/delete/{id}")
