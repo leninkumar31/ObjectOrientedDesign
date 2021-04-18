@@ -1,7 +1,7 @@
-1. Register end point
-    1. Method : POST
-    2. Path : “\register”
-    3. Payload (Required fields)
+## Register end point
+- Method : POST
+- Path : “\register”
+- Payload (Required fields)
         1. Username
         2. First name
         3. Lastname
