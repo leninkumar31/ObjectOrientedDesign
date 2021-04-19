@@ -62,7 +62,7 @@
 
 ## Update an existing Todo
 - Method: PUT
-- Path : \update\{id}
+- Path : \update\\{id}
 - Path param : todo id
 - Payload (required fields)
   - Task
@@ -76,7 +76,7 @@
 
 ## Delete an existing Todo
 - Method: DELETE
-- Path : \delete\{id}
+- Path : \delete\\{id}
 - Path param : todo-id
 - Response
   - 204 (no content) for successful deletion
