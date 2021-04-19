@@ -2,7 +2,7 @@
 
 ## Register end point
 - Method : POST
-- Path : "\register"
+- Path : \register
 - Payload (Required fields)
   - Username
   - First name
@@ -18,7 +18,7 @@
 
 ## Login end point
 - Method : POST
-- Path : "\login"
+- Path : \login
 - Payload (Required fields)
   - Username
   - Password
@@ -33,7 +33,7 @@
 
 ## Retrieve all Todos of logged user
 - Method : GET
-- Path : "\"
+- Path : \
 - Query params
   - page
   - size
@@ -48,7 +48,7 @@
 
 ## Create a new Todo
 - Method: POST
-- Path : "\insert"
+- Path : \insert
 - Payload (required fields)
   - Task
   - isCompleted
@@ -62,8 +62,8 @@
 
 ## Update an existing Todo
 - Method: PUT
-- Path : "\update\{id}"
-- Path param : todo-id
+- Path : \update\{id}
+- Path param : todo id
 - Payload (required fields)
   - Task
   - isCompleted
@@ -76,7 +76,7 @@
 
 ## Delete an existing Todo
 - Method: DELETE
-- Path : "\delete\{id}"
+- Path : \delete\{id}
 - Path param : todo-id
 - Response
   - 204 (no content) for successful deletion
