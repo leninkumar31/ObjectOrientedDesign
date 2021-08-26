@@ -21,6 +21,7 @@ public class GameManager {
 			try {
 				row = this.gameState.getBoard().findEmptyPosFromBottomInCol(col);
 				this.gameState.getBoard().setBoardPosition(row, col, player.getSymbol());
+				this.gameState.addMove(new Move(player, row, col));
 				return;
 			} catch (ColumnIsNotEmptyException | InvalidInputException | PositionIsAlreadySetException e) {
 				System.out.println("Invalid Input. Please enter valid one");

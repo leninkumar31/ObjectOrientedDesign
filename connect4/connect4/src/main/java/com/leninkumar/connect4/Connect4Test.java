@@ -13,7 +13,7 @@ public class Connect4Test {
 	public static void main(String[] args) {
 		Board board = new Board(6, 7);
 		Player player1 = PlayerFactory.getHumanPlayer("lenin", Symbol.BLUE);
-		Player player2 = PlayerFactory.getRandomAIPlayer(Symbol.RED);
+		Player player2 = PlayerFactory.getRudimentaryAIPlayer(Symbol.RED);
 		GameState gameState = new GameState(player1, player2, board);
 		GameManager manager = new GameManager(gameState);
 		while (true) {

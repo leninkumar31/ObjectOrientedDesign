@@ -11,4 +11,8 @@ public class PlayerFactory {
 	public static Player getRandomAIPlayer(Symbol symbol) {
 		return new RandomAIPlayer(symbol);
 	}
+
+	public static Player getRudimentaryAIPlayer(Symbol symbol) {
+		return new RudimentaryAIPlayer(symbol);
+	}
 }
